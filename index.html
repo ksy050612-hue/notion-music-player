@@ -19,7 +19,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 #player-bg-artwork {
@@ -45,7 +45,7 @@ body {
   z-index: 3;
   width: min(430px, calc(100vw - 30px));
   height: 100px;
-  margin: 40px auto;
+  margin: 60px auto;
 }
 
 #player {
@@ -54,7 +54,7 @@ body {
   height: 100%;
 }
 
-/* 정지 상태일 때: 트랙 바를 아래쪽(흰색 박스 안쪽)으로 내려서 숨김 */
+/* 정지 상태일 때: 트랙 바를 컨트롤 박스 아래로 완전히 숨김 */
 #player-track {
   position: absolute;
   top: 45px;
@@ -67,10 +67,10 @@ body {
   z-index: 1; 
 }
 
-/* 재생 중일 때: 위로 쏙 올라오는 위치 */
+/* 재생 중일 때: 위로 충분히 높이 솟아오르게 하고 z-index를 최상단으로 설정 */
 #player-track.active {
-  top: -85px;
-  z-index: 3;
+  top: -110px;
+  z-index: 10;
 }
 
 #album-name {
@@ -125,7 +125,7 @@ body {
   background: white;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
-  z-index: 2;
+  z-index: 5;
 }
 
 #album-art {
@@ -138,7 +138,7 @@ body {
   overflow: hidden;
   box-shadow: 0 0 0 10px white;
   transition: .3s ease;
-  z-index: 4;
+  z-index: 12;
 }
 
 #album-art.active {
@@ -238,7 +238,7 @@ body {
   }
 
   #player-track.active {
-    top: -75px;
+    top: -95px;
   }
 
   #album-art {
