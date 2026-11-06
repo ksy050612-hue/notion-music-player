@@ -16,9 +16,10 @@
       margin: 0;
       font-family: "Open Sans", sans-serif;
       overflow: hidden;
+      /* 플레이어가 위로 올라갈 때 위쪽이 잘리지 않도록 전체 여백 살짝 조정 */
+      padding-top: 40px; 
     }
 
-    /* 배경 블러 효과 */
     #player-bg-artwork {
       position: fixed;
       inset: -30px;
@@ -46,6 +47,8 @@
       width: 300px;
       height: 100px;
       z-index: 3;
+      /* 기본 위치를 아래쪽으로 살짝 내려서 전체 중심을 맞춤 */
+      margin-top: 30px; 
     }
 
     #player {
@@ -54,7 +57,6 @@
       z-index: 2;
     }
 
-    /* 트랙 정보 바 (정지 시 카드 안에 숨어있다가 재생 시 위로 쏙 올라옴) */
     #player-track {
       position: absolute;
       top: 0;
@@ -69,7 +71,7 @@
     }
 
     #player-track.active {
-      top: -65px;
+      top: -55px; /* 올라가는 높이를 조절하여 위로 너무 쏠리지 않도록 함 */
     }
 
     #album-name {
@@ -183,7 +185,7 @@
     }
 
     #album-art.active {
-      top: -55px;
+      top: -50px;
       box-shadow: 0 0 0 13px #fffbeb, 0 30px 50px rgba(217, 119, 6, 0.2);
     }
 
