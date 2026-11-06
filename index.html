@@ -4,79 +4,340 @@
   <meta charset="UTF-8">
   <title>Music Player</title>
   <style>
-    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap');
+    @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+    @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css");
 
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
+    html, body {
       background: transparent;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
+      font-family: "Open Sans", sans-serif;
     }
 
-    .player {
-      width: 320px;
-      background: #ffffff;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-      border-radius: 20px;
+    .icon:hover {
+      cursor: pointer;
+    }
+
+    #app-cover {
+      width: 300px;
+      height: 100px;
+    }
+
+    #player {
+      position: relative;
+      height: 100%;
+      z-index: 2;
+    }
+
+    #player-track {
+      position: absolute;
+      top: 0;
+      right: 15px;
+      left: 15px;
+      padding: 13px 22px 10px 184px;
+      background-color: #fff;
+      border-radius: 15px 15px 0 0;
+      transition: 0.3s ease top;
+      z-index: 1;box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    #player-track.active {
+      top: -92px;
+    }
+
+    #album-name {
+      color: #54576f;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
       overflow: hidden;
-      text-align: center;
-      padding: 25px;
+      text-overflow: ellipsis;
     }
 
-    .album-art {
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 20px auto;
+    #track-name {
+      color: #acaebd;
+      font-size: 12px;
+      margin: 2px 0 13px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #track-time {
+      position: relative;
+      margin-bottom: 6px;
+      overflow: hidden;
+    }
+
+    #current-time {
+      float: left;
+    }
+
+    #track-length {
+      float: right;
+    }
+
+    #current-time, #track-length {
+      color: transparent;
+      font-size: 11px;
+      background-color: #ffe8ee;
+      border-radius: 10px;
+      transition: 0.3s color 0.1s;
+    }
+
+    #player-track.active #current-time, #player-track.active #track-length {
+      color: #f86d92;
+      background-color: transparent;
+    }
+
+    #s-area, #seek-bar {
+      position: relative;
+      height: 4px;
+      border-radius: 4px;
+    }
+
+    #s-area {
+      background-color: #ffe8ee;
+      cursor: pointer;
+    }
+
+    #ins-time {
+      position: absolute;
+      top: -29px;
+      color: #fff;
+      font-size: 12px;
+      white-space: pre;
+      padding: 5px 6px;
+      border-radius: 4px;
+      display: none;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    #s-hover {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    #seek-bar {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      background-color: #fd6d94;
+      transition: 0.1s width linear;
+    }
+
+    #player-content {
+      position: relative;
+      height: 100%;
+      background-color: #fff;
+      box-shadow: 0 30px 80px rgba(248, 109, 146, 0.3);
+      border-radius: 15px;
+      z-index: 2;
+    }
+
+    #album-art {
+      position: absolute;
+      top: -40px;
+      left: 15px;
+      width: 115px;
+      height: 115px;
       border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 0 0 10px #fff, 0 30px 50px rgba(0, 0, 0, 0.2);
+      transform: rotate(0deg);
+      transition: 0.3s ease all;
+      z-index: 3;
     }
 
-    .album-art img {
+    #album-art.active {
+      top: -60px;
+      box-shadow: 0 0 0 13px #fff, 0 30px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    #album-art img {
+      display: block;
       width: 100%;
       height: 100%;
+      border-radius: 50%;
       object-fit: cover;
     }
 
-    .song-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: #222;
-      margin: 0 0 5px 0;
+    #album-art.active img.active {
+      animation: rotateAlbumArt 3s linear 0s infinite forwards;
     }
 
-    .artist-name {
+    @keyframes rotateAlbumArt {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #buffer-box {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      height: 13px;
+      color: #b3b3b3;
       font-size: 13px;
-      color: #888;
-      margin-bottom: 20px;
+      font-family: Helvetica;
+      text-align: center;
+      font-weight: bold;
+      line-height: 1;
+      padding: 0;
+      margin: -7px 0 0 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s linear all;
+      z-index: 2;
     }
 
-    audio {
-      width: 100%;
-      outline: none;
+    #album-art.buffering #buffer-box {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #player-controls {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      width: 150px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .control {
+      margin: 0 10px;
+    }
+
+    .button {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border-radius: 50%;
+      color: #fd6d94;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .button i {
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-  <div class="player">
-    <div class="album-art">
-      <img src="cover.png" alt="앨범 커버">
+  <div id="app-cover">
+    <div id="player">
+      <div id="player-track">
+        <div id="album-name">너와의 거리, 30cm</div>
+        <div id="track-name">Um minkyung</div>
+        <div id="track-time">
+          <div id="current-time"></div>
+          <div id="track-length"></div>
+          <div id="s-area">
+            <div id="ins-time"></div>
+            <div id="s-hover"></div>
+            <div id="seek-bar"></div>
+          </div>
+        </div>
+      </div>
+      <div id="player-content">
+        <div id="album-art">
+          <img src="cover.png" id="cover-art" alt="앨범 커버" class="active">
+          <div id="buffer-box">Buffering ...</div>
+        </div>
+        <div id="player-controls">
+          <div class="control">
+            <div class="button" id="play-pause-button">
+              <i class="fa fa-play"></i>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="song-title">너와의 거리, 30cm</div>
-    <div class="artist-name">Um minkyung</div>
-    <audio controls>
-      <source src="MP3.mp3" type="audio/mpeg">
-      브라우저가 audio 요소를 지원하지 않습니다.
-    </audio>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var playerTrack = document.querySelector('#player-track'),
+          bgArtwork = document.querySelector('#bg-artwork'),
+          albumArt = document.querySelector('#album-art'),
+          sArea = document.querySelector('#s-area'),
+          seekBar = document.querySelector('#seek-bar'),
+          trackTime = document.querySelector('#track-time'),
+          insTime = document.querySelector('#ins-time'),
+          sHover = document.querySelector('#s-hover'),
+          playPauseButton = document.querySelector('#play-pause-button'),
+          i = document.querySelector('#play-pause-button i'),
+          albumName = document.querySelector('#album-name'),
+          trackName = document.querySelector('#track-name'),
+          coverArt = document.querySelector('#cover-art'),
+          currentTimeLoc = document.querySelector('#current-time'),
+          seekTimeLoc = document.querySelector('#track-length'),
+          audio = new Audio('MP3.mp3');
+
+      function playPause() {
+        if (audio.paused) {
+          playerTrack.classList.add('active');
+          albumArt.classList.add('active');
+          coverArt.classList.add('active');
+          audio.play();
+          i.setAttribute('class', 'fa fa-pause');
+        } else {
+          playerTrack.classList.remove('active');
+          albumArt.classList.remove('active');
+          coverArt.classList.remove('active');
+          audio.pause();
+          i.setAttribute('class', 'fa fa-play');
+        }
+      }
+
+      playPauseButton.addEventListener('click', playPause);
+
+      audio.addEventListener('timeupdate', function() {
+        var curMinutes = Math.floor(audio.currentTime / 60),
+            curSeconds = Math.floor(audio.currentTime - curMinutes * 60),
+            durMinutes = Math.floor(audio.duration / 60),
+            durSeconds = Math.floor(audio.duration - durMinutes * 60),
+            percentage = audio.currentTime / audio.duration * 100;
+
+        if (curMinutes < 10) curMinutes = '0' + curMinutes;
+        if (curSeconds < 10) curSeconds = '0' + curSeconds;
+        if (durMinutes < 10) durMinutes = '0' + durMinutes;
+        if (durSeconds < 10) durSeconds = '0' + durSeconds;
+
+        if (isNaN(curMinutes) || isNaN(curSeconds)) currentTimeLoc.textContent = '00:00';
+        else currentTimeLoc.textContent = curMinutes + ':' + curSeconds;
+
+        if (isNaN(durMinutes) || isNaN(durSeconds)) seekTimeLoc.textContent = '00:00';
+        else seekTimeLoc.textContent = durMinutes + ':' + durSeconds;
+
+        seekBar.style.width = percentage + '%';
+        if (audio.currentTime === audio.duration) {
+          i.setAttribute('class', 'fa fa-play');
+          seekBar.style.width = '0%';
+          currentTimeLoc.textContent = '00:00';
+          playerTrack.classList.remove('active');
+          albumArt.classList.remove('active');
+          coverArt.classList.remove('active');
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
