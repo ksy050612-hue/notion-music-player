@@ -1,428 +1,372 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Music Player</title>
+  <meta charset="UTF-8">
+  <title>Music Player</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+    @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css");
 
-<style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  user-select: none;
-}
+    html, body {
+      background: #fffcf5;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      font-family: "Open Sans", sans-serif;
+      overflow: hidden;
+    }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #fffcf5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 50px;
-}
+    /* 배경 블러 효과 */
+    #player-bg-artwork {
+      position: fixed;
+      inset: -30px;
+      background-image: url("cover.png");
+      background-size: cover;
+      background-position: center;
+      filter: blur(40px);
+      z-index: 1;
+    }
 
-#player-bg-artwork {
-  position: fixed;
-  inset: -30px;
-  background-image: url("cover.png");
-  background-size: cover;
-  background-position: center;
-  filter: blur(40px);
-  z-index: 1;
-}
+    #player-bg-layer {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0.6;
+      z-index: 2;
+    }
 
-#player-bg-layer {
-  position: fixed;
-  inset: 0;
-  background: #fff;
-  opacity: .6;
-  z-index: 2;
-}
+    .icon:hover {
+      cursor: pointer;
+    }
 
-#player-container {
-  position: relative;
-  z-index: 3;
-  width: min(430px, calc(100vw - 30px));
-  height: 100px;
-  margin: 40px auto;
-}
+    #app-cover {
+      position: relative;
+      width: 300px;
+      height: 100px;
+      z-index: 3;
+    }
 
-#player {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+    #player {
+      position: relative;
+      height: 100%;
+      z-index: 2;
+    }
 
-/* 정지 상태: 트랙바를 흰색 박스 밑으로 완전히 내려서 숨김 */
-#player-track {
-  position: absolute;
-  top: 35px;
-  left: 15px;
-  right: 15px;
-  padding: 13px 20px 10px 184px;
-  background: #fffbeb;
-  border-radius: 15px 15px 0 0;
-  transition: top .3s ease;
-  z-index: 1; 
-}
+    /* 트랙 정보 바 (정지 시 카드 안에 숨어있다가 재생 시 위로 쏙 올라옴) */
+    #player-track {
+      position: absolute;
+      top: 0;
+      right: 15px;
+      left: 15px;
+      padding: 13px 22px 10px 184px;
+      background-color: #fffbeb;
+      border-radius: 15px 15px 0 0;
+      transition: 0.3s ease top;
+      z-index: 1;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
 
-/* 재생 상태: 위로 알맞게 쏙 올라오도록 위치 수정 */
-#player-track.active {
-  top: -48px;
-  z-index: 10;
-}
+    #player-track.active {
+      top: -65px;
+    }
 
-#album-name {
-  color: #54576f;
-  font-size: 17px;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    #album-name {
+      color: #54576f;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-#track-name {
-  color: #acaebd;
-  font-size: 13px;
-  margin: 3px 0 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    #track-name {
+      color: #acaebd;
+      font-size: 12px;
+      margin: 2px 0 13px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-#track-time {
-  height: 12px;
-  margin-bottom: 4px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #d97706;
-}
+    #track-time {
+      position: relative;
+      margin-bottom: 6px;
+      overflow: hidden;
+    }
 
-#seek-bar-container {
-  position: relative;
-  height: 4px;
-  background: #fef3c7;
-  border-radius: 4px;
-  cursor: pointer;
-  touch-action: pan-y;
-}
+    #current-time {
+      float: left;
+    }
 
-#seek-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background: #f59e0b;
-  border-radius: 4px;
-}
+    #track-length {
+      float: right;
+    }
 
-#player-content {
-  position: relative;
-  height: 100%;
-  background: white;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
-  border-radius: 15px;
-  z-index: 5;
-}
+    #current-time, #track-length {
+      color: transparent;
+      font-size: 11px;
+      background-color: #fef3c7;
+      border-radius: 10px;
+      transition: 0.3s color 0.1s;
+    }
 
-#album-art {
-  position: absolute;
-  top: -40px;
-  width: 115px;
-  height: 115px;
-  margin-left: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 0 0 10px white;
-  transition: .3s ease;
-  z-index: 12;
-}
+    #player-track.active #current-time, #player-track.active #track-length {
+      color: #d97706;
+      background-color: transparent;
+    }
 
-#album-art.active {
-  top: -48px;
-  box-shadow: 0 0 0 4px #fffbeb,
-              0 30px 50px -15px rgba(217, 119, 6, 0.2);
-}
+    #s-area, #seek-bar {
+      position: relative;
+      height: 4px;
+      border-radius: 4px;
+    }
 
-#album-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+    #s-area {
+      background-color: #fef3c7;
+      cursor: pointer;
+    }
 
-#album-art.active img {
-  animation: rotateAlbumArt 10s linear infinite;
-}
+    #ins-time {
+      position: absolute;
+      top: -29px;
+      color: #fff;
+      font-size: 12px;
+      white-space: pre;
+      padding: 5px 6px;
+      border-radius: 4px;
+      display: none;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.6);
+    }
 
-@keyframes rotateAlbumArt {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+    #s-hover {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
 
-#album-art::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #d6dee7;
-  border: 2px solid white;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+    #seek-bar {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      background-color: #f59e0b;
+      transition: 0.1s width linear;
+    }
 
-#player-controls {
-  height: 100%;
-  margin-left: 141px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
+    #player-content {
+      position: relative;
+      height: 100%;
+      background-color: #fff;
+      box-shadow: 0 30px 80px rgba(217, 119, 6, 0.2);
+      border-radius: 15px;
+      z-index: 2;
+    }
 
-.control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-}
+    #album-art {
+      position: absolute;
+      top: -40px;
+      left: 15px;
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 10px #fff, 0 30px 50px rgba(0, 0, 0, 0.2);
+      transform: rotate(0deg);
+      transition: 0.3s ease all;
+      z-index: 3;
+    }
 
-.button {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  background: white;
-  border: none;
-  color: #d6dee7;
-  font-size: 25px;
-  cursor: pointer;
-  transition: .2s;
-}
+    #album-art.active {
+      top: -55px;
+      box-shadow: 0 0 0 13px #fffbeb, 0 30px 50px rgba(217, 119, 6, 0.2);
+    }
 
-.button:hover {
-  background: #f3f4f6;
-  color: #9ca3af;
-}
+    #album-art img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
-#play-pause-button {
-  font-size: 27px;
-}
+    #album-art.active img.active {
+      animation: rotateAlbumArt 3s linear 0s infinite forwards;
+    }
 
-#play-pause-button.playing {
-  color: #d97706;
-}
+    @keyframes rotateAlbumArt {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-#message {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 115px;
-  color: #777;
-  font-size: 11px;
-}
+    #buffer-box {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      height: 13px;
+      color: #b3b3b3;
+      font-size: 13px;
+      font-family: Helvetica;
+      text-align: center;
+      font-weight: bold;
+      line-height: 1;
+      padding: 0;
+      margin: -7px 0 0 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s linear all;
+      z-index: 2;
+    }
 
-@media (max-width: 480px) {
-  #player-container {
-    width: calc(100vw - 24px);
-    height: 90px;
-  }
+    #album-art.buffering #buffer-box {
+      opacity: 1;
+      visibility: visible;
+    }
 
-  #player-track {
-    padding-left: 125px;
-    padding-right: 12px;
-    top: 30px;
-  }
+    #player-controls {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      width: 150px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  #player-track.active {
-    top: -45px;
-  }
+    .control {
+      margin: 0 10px;
+    }
 
-  #album-art {
-    width: 90px;
-    height: 90px;
-    margin-left: 25px;
-    top: -25px;
-  }
+    .button {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border-radius: 50%;
+      color: #f59e0b;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
 
-  #album-art.active {
-    top: -35px;
-  }
-
-  #player-controls {
-    margin-left: 112px;
-  }
-
-  .button {
-    width: 48px;
-    height: 55px;
-    font-size: 21px;
-  }
-
-  #album-name {
-    font-size: 14px;
-  }
-
-  #track-name {
-    font-size: 11px;
-  }
-}
-</style>
+    .button i {
+      font-size: 16px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="player-bg-artwork"></div>
-<div id="player-bg-layer"></div>
+  <div id="player-bg-artwork"></div>
+  <div id="player-bg-layer"></div>
 
-<div id="player-container">
-  <div id="player">
-
-    <div id="player-track">
-      <div id="album-name">너와의 거리, 30cm</div>
-      <div id="track-name">Um minkyung</div>
-
-      <div id="track-time">
-        <span id="current-time">00:00</span>
-        <span id="track-length">00:00</span>
-      </div>
-
-      <div id="seek-bar-container">
-        <div id="seek-bar"></div>
-      </div>
-    </div>
-
-    <div id="player-content">
-
-      <div id="album-art">
-        <img src="cover.png" alt="Album cover">
-      </div>
-
-      <div id="player-controls">
-        <div class="control">
-          <button class="button" id="previous" aria-label="처음으로">
-            ↶
-          </button>
+  <div id="app-cover">
+    <div id="player">
+      <div id="player-track">
+        <div id="album-name">너와의 거리, 30cm</div>
+        <div id="track-name">Um minkyung</div>
+        <div id="track-time">
+          <div id="current-time">00:00</div>
+          <div id="track-length">00:00</div>
+          <div id="s-area">
+            <div id="ins-time"></div>
+            <div id="s-hover"></div>
+            <div id="seek-bar"></div>
+          </div>
         </div>
-
-        <div class="control">
-          <button class="button" id="play-pause-button"
-                  aria-label="재생">
-            ▶
-          </button>
+      </div>
+      <div id="player-content">
+        <div id="album-art">
+          <img src="cover.png" id="cover-art" alt="앨범 커버" class="">
+          <div id="buffer-box">Buffering ...</div>
         </div>
-
-        <div class="control">
-          <button class="button" id="next" aria-label="처음으로">
-            ↻
-          </button>
+        <div id="player-controls">
+          <div class="control">
+            <div class="button" id="play-pause-button">
+              <i class="fa fa-play"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div id="message"></div>
   </div>
-</div>
 
-<audio id="audio" preload="metadata">
-  <source src="MP3.mp3" type="audio/mpeg">
-</audio>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var playerTrack = document.querySelector('#player-track'),
+          albumArt = document.querySelector('#album-art'),
+          sArea = document.querySelector('#s-area'),
+          seekBar = document.querySelector('#seek-bar'),
+          currentTimeLoc = document.querySelector('#current-time'),
+          seekTimeLoc = document.querySelector('#track-length'),
+          playPauseButton = document.querySelector('#play-pause-button'),
+          i = document.querySelector('#play-pause-button i'),
+          coverArt = document.querySelector('#cover-art'),
+          audio = new Audio('MP3.mp3');
 
-<script>
-const audio = document.getElementById("audio");
-const playButton = document.getElementById("play-pause-button");
-const albumArt = document.getElementById("album-art");
-const playerTrack = document.getElementById("player-track");
-const seekBar = document.getElementById("seek-bar");
-const seekArea = document.getElementById("seek-bar-container");
-const currentTime = document.getElementById("current-time");
-const trackLength = document.getElementById("track-length");
-const message = document.getElementById("message");
+      function formatTime(seconds) {
+        if (!Number.isFinite(seconds)) return "00:00";
+        var min = Math.floor(seconds / 60);
+        var sec = Math.floor(seconds % 60);
+        return (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
+      }
 
-function formatTime(seconds) {
-  if (!Number.isFinite(seconds)) return "00:00";
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
-  return String(min).padStart(2, "0") + ":" +
-         String(sec).padStart(2, "0");
-}
+      function playPause() {
+        if (audio.paused) {
+          playerTrack.classList.add('active');
+          albumArt.classList.add('active');
+          coverArt.classList.add('active');
+          audio.play();
+          i.setAttribute('class', 'fa fa-pause');
+        } else {
+          playerTrack.classList.remove('active');
+          albumArt.classList.remove('active');
+          coverArt.classList.remove('active');
+          audio.pause();
+          i.setAttribute('class', 'fa fa-play');
+        }
+      }
 
-function updateButton() {
-  const playing = !audio.paused;
-  playButton.textContent = playing ? "Ⅱ" : "▶";
-  playButton.classList.toggle("playing", playing);
-  playButton.setAttribute("aria-label",
-    playing ? "일시정지" : "재생");
-  albumArt.classList.toggle("active", playing);
-  playerTrack.classList.toggle("active", playing);
-}
+      playPauseButton.addEventListener('click', playPause);
 
-playButton.addEventListener("click", async () => {
-  if (audio.paused) {
-    try {
-      await audio.play();
-      message.textContent = "";
-    } catch (error) {
-      message.textContent =
-        "재생할 수 없습니다. MP3 파일을 확인해 주세요.";
-      console.error(error);
-    }
-  } else {
-    audio.pause();
-  }
-  updateButton();
-});
+      audio.addEventListener('timeupdate', function() {
+        currentTimeLoc.textContent = formatTime(audio.currentTime);
+        seekTimeLoc.textContent = formatTime(audio.duration);
+        var percentage = (audio.currentTime / audio.duration) * 100;
+        if (isNaN(percentage)) percentage = 0;
+        seekBar.style.width = percentage + '%';
 
-audio.addEventListener("loadedmetadata", () => {
-  trackLength.textContent = formatTime(audio.duration);
-  message.textContent = "";
-});
+        if (audio.currentTime === audio.duration) {
+          i.setAttribute('class', 'fa fa-play');
+          seekBar.style.width = '0%';
+          currentTimeLoc.textContent = '00:00';
+          playerTrack.classList.remove('active');
+          albumArt.classList.remove('active');
+          coverArt.classList.remove('active');
+        }
+      });
 
-audio.addEventListener("timeupdate", () => {
-  currentTime.textContent = formatTime(audio.currentTime);
+      audio.addEventListener('loadedmetadata', function() {
+        seekTimeLoc.textContent = formatTime(audio.duration);
+      });
 
-  if (Number.isFinite(audio.duration) && audio.duration > 0) {
-    seekBar.style.width =
-      (audio.currentTime / audio.duration * 100) + "%";
-  }
-});
-
-audio.addEventListener("error", () => {
-  message.textContent =
-    "음악 파일을 불러오지 못했습니다. 파일 경로를 확인해 주세요.";
-});
-
-audio.addEventListener("ended", () => {
-  audio.currentTime = 0;
-  updateButton();
-});
-
-seekArea.addEventListener("click", (event) => {
-  if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
-
-  const rect = seekArea.getBoundingClientRect();
-  const position = (event.clientX - rect.left) / rect.width;
-
-  audio.currentTime = Math.max(
-    0, Math.min(1, position)
-  ) * audio.duration;
-});
-
-document.getElementById("previous").addEventListener("click", () => {
-  audio.currentTime = 0;
-});
-
-document.getElementById("next").addEventListener("click", () => {
-  audio.currentTime = 0;
-  if (!audio.paused) audio.play();
-});
-
-audio.addEventListener("play", updateButton);
-audio.addEventListener("pause", updateButton);
-</script>
+      sArea.addEventListener('click', function(event) {
+        var rect = sArea.getBoundingClientRect();
+        var clickPosition = (event.clientX - rect.left) / rect.width;
+        if (Number.isFinite(audio.duration)) {
+          audio.currentTime = clickPosition * audio.duration;
+          seekBar.style.width = (clickPosition * 100) + '%';
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
