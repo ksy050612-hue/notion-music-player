@@ -49,8 +49,7 @@
       width: 430px;
       height: 100px;
       z-index: 3;
-      /* 위젯 전체 위치를 아래쪽으로 더 내림 */
-      margin-top: 60px;
+      margin-top: 60px; /* 전체 위치 아래로 내림 */
     }
 
     #player {
@@ -73,7 +72,7 @@
     }
 
     #player-track.active {
-      top: -95px;
+      top: -100px;
     }
 
     #album-name {
@@ -88,25 +87,29 @@
     #track-name {
       color: #acaebd;
       font-size: 12px;
-      margin: 2px 0 10px 0;
+      margin: 2px 0 8px 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* 시간 표시 영역과 재생바 사이 간격을 떨어뜨림 */
+    /* 시간 표시를 위로 올리고 재생바와 확실히 떨어지도록 분리 */
     #track-time {
       position: relative;
-      margin-bottom: 8px;
-      overflow: hidden;
+      height: 15px;
+      margin-bottom: 6px;
     }
 
     #current-time {
-      float: left;
+      position: absolute;
+      left: 0;
+      bottom: 0;
     }
 
     #track-length {
-      float: right;
+      position: absolute;
+      right: 0;
+      bottom: 0;
     }
 
     #current-time, #track-length {
@@ -115,6 +118,7 @@
       background-color: #fef3c7;
       border-radius: 10px;
       transition: 0.3s color 0.1s;
+      padding: 0 4px;
     }
 
     #player-track.active #current-time, #player-track.active #track-length {
@@ -131,7 +135,7 @@
     #s-area {
       background-color: #fef3c7;
       cursor: pointer;
-      margin-top: 4px; /* 재생바 위쪽 여백 추가 */
+      width: 100%;
     }
 
     #ins-time {
@@ -189,7 +193,7 @@
     }
 
     #album-art.active {
-      top: -60px;
+      top: -65px;
       box-shadow: 0 0 0 13px #fffbeb, 0 30px 50px rgba(217, 119, 6, 0.3);
     }
 
@@ -286,11 +290,11 @@
         <div id="track-time">
           <div id="current-time">00:00</div>
           <div id="track-length">00:00</div>
-          <div id="s-area">
-            <div id="ins-time"></div>
-            <div id="s-hover"></div>
-            <div id="seek-bar"></div>
-          </div>
+        </div>
+        <div id="s-area">
+          <div id="ins-time"></div>
+          <div id="s-hover"></div>
+          <div id="seek-bar"></div>
         </div>
       </div>
       <div id="player-content">
