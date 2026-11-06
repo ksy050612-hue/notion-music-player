@@ -19,7 +19,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 80px;
+  padding-top: 50px;
 }
 
 #player-bg-artwork {
@@ -45,7 +45,7 @@ body {
   z-index: 3;
   width: min(430px, calc(100vw - 30px));
   height: 100px;
-  margin: 60px auto;
+  margin: 40px auto;
 }
 
 #player {
@@ -54,10 +54,10 @@ body {
   height: 100%;
 }
 
-/* 정지 상태일 때: 트랙 바를 컨트롤 박스 아래로 완전히 숨김 */
+/* 정지 상태: 트랙바가 아래로 튀어나오지 않고 카드 상단에 깔끔하게 위치 */
 #player-track {
   position: absolute;
-  top: 45px;
+  top: 0;
   left: 15px;
   right: 15px;
   padding: 13px 20px 10px 184px;
@@ -67,9 +67,9 @@ body {
   z-index: 1; 
 }
 
-/* 재생 중일 때: 위로 충분히 높이 솟아오르게 하고 z-index를 최상단으로 설정 */
+/* 재생 상태: 너무 높지 않고 적당한 높이(-48px)로 쏙 올라오며 레이어가 위로 옴 */
 #player-track.active {
-  top: -110px;
+  top: -48px;
   z-index: 10;
 }
 
@@ -142,7 +142,7 @@ body {
 }
 
 #album-art.active {
-  top: -60px;
+  top: -48px;
   box-shadow: 0 0 0 4px #fffbeb,
               0 30px 50px -15px rgba(217, 119, 6, 0.2);
 }
@@ -234,11 +234,10 @@ body {
   #player-track {
     padding-left: 125px;
     padding-right: 12px;
-    top: 40px;
   }
 
   #player-track.active {
-    top: -95px;
+    top: -45px;
   }
 
   #album-art {
@@ -249,7 +248,7 @@ body {
   }
 
   #album-art.active {
-    top: -45px;
+    top: -35px;
   }
 
   #player-controls {
