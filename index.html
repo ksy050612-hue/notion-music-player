@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <title>Music Player</title>
   <style>
-    /* CodePen 원본 스타일 기반 + 수정된 디자인 */
     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       background: transparent;
@@ -18,22 +21,22 @@
     }
 
     .player {
-      width: 300px;
+      width: 320px;
       background: #ffffff;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
       overflow: hidden;
       text-align: center;
-      padding: 20px;
+      padding: 25px;
     }
 
     .album-art {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto 15px auto;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 20px auto;
       border-radius: 50%;
       overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
     .album-art img {
@@ -43,16 +46,16 @@
     }
 
     .song-title {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 600;
-      color: #333;
-      margin: 5px 0;
+      color: #222;
+      margin: 0 0 5px 0;
     }
 
     .artist-name {
       font-size: 13px;
       color: #888;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     audio {
