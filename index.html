@@ -15,11 +15,13 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #ffeff5;
+  background: #fffcf5;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /* 위쪽으로 올라가는 공간을 확실하게 확보하기 위해 패딩 조정 */
+  padding-top: 70px; 
 }
 
 #player-bg-artwork {
@@ -36,7 +38,7 @@ body {
   position: fixed;
   inset: 0;
   background: #fff;
-  opacity: .5;
+  opacity: .6;
   z-index: 2;
 }
 
@@ -56,18 +58,18 @@ body {
 
 #player-track {
   position: absolute;
-  top: 0;
+  top: 15px; /* 기본 위치를 아래로 살짝 내려서 시작 */
   left: 15px;
   right: 15px;
   padding: 13px 20px 10px 184px;
-  background: #fff7f7;
+  background: #fffbeb;
   border-radius: 15px 15px 0 0;
   transition: top .3s ease;
   z-index: 1;
 }
 
 #player-track.active {
-  top: -92px;
+  top: -75px; /* 재생될 때 올라가는 높이를 조절하여 위가 잘리지 않게 함 */
 }
 
 #album-name {
@@ -94,13 +96,13 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #f86d92;
+  color: #d97706; /* 진한 주황색 포인트 */
 }
 
 #seek-bar-container {
   position: relative;
   height: 4px;
-  background: #ffe8ee;
+  background: #fef3c7;
   border-radius: 4px;
   cursor: pointer;
   touch-action: pan-y;
@@ -112,7 +114,7 @@ body {
   left: 0;
   width: 0%;
   height: 100%;
-  background: #fd6d94;
+  background: #f59e0b; /* 진한 노랑/주황색 프로그레스바 */
   border-radius: 4px;
 }
 
@@ -120,14 +122,14 @@ body {
   position: relative;
   height: 100%;
   background: white;
-  box-shadow: 0 30px 80px #656565;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
   z-index: 2;
 }
 
 #album-art {
   position: absolute;
-  top: -40px;
+  top: -25px; /* 기본 위치 조절 */
   width: 115px;
   height: 115px;
   margin-left: 40px;
@@ -138,9 +140,9 @@ body {
 }
 
 #album-art.active {
-  top: -60px;
-  box-shadow: 0 0 0 4px #fff7f7,
-              0 30px 50px -15px #afb7c1;
+  top: -45px; /* 재생될 때 앨범아트 위치 */
+  box-shadow: 0 0 0 4px #fffbeb,
+              0 30px 50px -15px rgba(217, 119, 6, 0.2);
 }
 
 #album-art img {
@@ -200,8 +202,8 @@ body {
 }
 
 .button:hover {
-  background: #d6d6de;
-  color: white;
+  background: #f3f4f6;
+  color: #9ca3af;
 }
 
 #play-pause-button {
@@ -209,7 +211,7 @@ body {
 }
 
 #play-pause-button.playing {
-  color: #f86d92;
+  color: #d97706; /* 재생 버튼 포인트 색상 (진한 주황/노랑) */
 }
 
 #message {
@@ -222,6 +224,10 @@ body {
 }
 
 @media (max-width: 480px) {
+  body {
+    padding-top: 50px;
+  }
+
   #player-container {
     width: calc(100vw - 24px);
     height: 90px;
@@ -236,11 +242,11 @@ body {
     width: 90px;
     height: 90px;
     margin-left: 25px;
-    top: -25px;
+    top: -15px;
   }
 
   #album-art.active {
-    top: -45px;
+    top: -35px;
   }
 
   #player-controls {
@@ -273,7 +279,6 @@ body {
   <div id="player">
 
     <div id="player-track">
-      <!-- 수정된 음악 제목 및 가수 이름 -->
       <div id="album-name">너와의 거리, 30cm</div>
       <div id="track-name">Um minkyung</div>
 
