@@ -54,10 +54,10 @@ body {
   height: 100%;
 }
 
-/* 정지 상태: 트랙바가 아래로 튀어나오지 않고 카드 상단에 깔끔하게 위치 */
+/* 정지 상태: 트랙바를 흰색 박스 밑으로 완전히 내려서 숨김 */
 #player-track {
   position: absolute;
-  top: 0;
+  top: 35px;
   left: 15px;
   right: 15px;
   padding: 13px 20px 10px 184px;
@@ -67,7 +67,7 @@ body {
   z-index: 1; 
 }
 
-/* 재생 상태: 너무 높지 않고 적당한 높이(-48px)로 쏙 올라오며 레이어가 위로 옴 */
+/* 재생 상태: 위로 알맞게 쏙 올라오도록 위치 수정 */
 #player-track.active {
   top: -48px;
   z-index: 10;
@@ -234,6 +234,7 @@ body {
   #player-track {
     padding-left: 125px;
     padding-right: 12px;
+    top: 30px;
   }
 
   #player-track.active {
