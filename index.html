@@ -49,6 +49,8 @@
       width: 430px;
       height: 100px;
       z-index: 3;
+      /* 위젯 전체 위치를 아래쪽으로 더 내림 */
+      margin-top: 60px;
     }
 
     #player {
@@ -62,7 +64,7 @@
       top: 0;
       right: 15px;
       left: 15px;
-      padding: 13px 22px 10px 184px;
+      padding: 13px 22px 14px 184px;
       background-color: #fffbeb;
       border-radius: 15px 15px 0 0;
       transition: 0.3s ease top;
@@ -71,7 +73,7 @@
     }
 
     #player-track.active {
-      top: -92px;
+      top: -95px;
     }
 
     #album-name {
@@ -86,15 +88,16 @@
     #track-name {
       color: #acaebd;
       font-size: 12px;
-      margin: 2px 0 13px 0;
+      margin: 2px 0 10px 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
+    /* 시간 표시 영역과 재생바 사이 간격을 떨어뜨림 */
     #track-time {
       position: relative;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       overflow: hidden;
     }
 
@@ -121,13 +124,14 @@
 
     #s-area, #seek-bar {
       position: relative;
-      height: 4px;
+      height: 5px;
       border-radius: 4px;
     }
 
     #s-area {
       background-color: #fef3c7;
       cursor: pointer;
+      margin-top: 4px; /* 재생바 위쪽 여백 추가 */
     }
 
     #ins-time {
