@@ -19,8 +19,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 상하로 움직이는 트랙 바가 잘리지 않도록 여유 공간 확보 */
-  padding: 60px 0; 
+  /* 위쪽으로 트랙바가 올라갈 공간 넉넉히 확보 */
+  padding-top: 60px;
 }
 
 #player-bg-artwork {
@@ -46,7 +46,7 @@ body {
   z-index: 3;
   width: min(430px, calc(100vw - 30px));
   height: 100px;
-  margin: 90px auto 30px auto; /* 위쪽 트랙 바가 올라갈 공간 확보 */
+  margin: 40px auto;
 }
 
 #player {
@@ -55,9 +55,10 @@ body {
   height: 100%;
 }
 
+/* 평소에는 컨트롤 박스 위치(top: 0)에 숨어있음 */
 #player-track {
   position: absolute;
-  top: -85px; /* 기본 상태에서도 트랙 바가 위쪽에 예쁘게 자리 잡도록 수정 */
+  top: 0;
   left: 15px;
   right: 15px;
   padding: 13px 20px 10px 184px;
@@ -67,9 +68,9 @@ body {
   z-index: 1;
 }
 
-/* 재생 중일 때도 동일한 위치 유지 혹은 자연스러운 연출 */
+/* 재생을 누르면 위로 쏙 올라옴 */
 #player-track.active {
-  top: -85px; 
+  top: -85px;
 }
 
 #album-name {
@@ -96,7 +97,7 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #d97706; /* 진한 주황색 포인트 */
+  color: #d97706;
 }
 
 #seek-bar-container {
@@ -114,7 +115,7 @@ body {
   left: 0;
   width: 0%;
   height: 100%;
-  background: #f59e0b; /* 진한 노랑/주황색 프로그레스바 */
+  background: #f59e0b;
   border-radius: 4px;
 }
 
@@ -129,7 +130,7 @@ body {
 
 #album-art {
   position: absolute;
-  top: -45px;
+  top: -40px;
   width: 115px;
   height: 115px;
   margin-left: 40px;
@@ -140,7 +141,7 @@ body {
 }
 
 #album-art.active {
-  top: -45px;
+  top: -60px;
   box-shadow: 0 0 0 4px #fffbeb,
               0 30px 50px -15px rgba(217, 119, 6, 0.2);
 }
@@ -211,7 +212,7 @@ body {
 }
 
 #play-pause-button.playing {
-  color: #d97706; /* 재생 버튼 포인트 색상 */
+  color: #d97706;
 }
 
 #message {
@@ -232,6 +233,9 @@ body {
   #player-track {
     padding-left: 125px;
     padding-right: 12px;
+  }
+
+  #player-track.active {
     top: -75px;
   }
 
@@ -239,11 +243,11 @@ body {
     width: 90px;
     height: 90px;
     margin-left: 25px;
-    top: -35px;
+    top: -25px;
   }
 
   #album-art.active {
-    top: -35px;
+    top: -45px;
   }
 
   #player-controls {
