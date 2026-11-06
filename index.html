@@ -19,7 +19,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 위쪽으로 트랙바가 올라갈 공간 넉넉히 확보 */
   padding-top: 60px;
 }
 
@@ -55,22 +54,23 @@ body {
   height: 100%;
 }
 
-/* 평소에는 컨트롤 박스 위치(top: 0)에 숨어있음 */
+/* z-index를 높여서 흰색 박스보다 위로 올라오게 수정 */
 #player-track {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 15px;
   right: 15px;
   padding: 13px 20px 10px 184px;
   background: #fffbeb;
   border-radius: 15px 15px 0 0;
   transition: top .3s ease;
-  z-index: 1;
+  z-index: 1; 
 }
 
-/* 재생을 누르면 위로 쏙 올라옴 */
+/* 재생 시 위로 쏙 올라오는 위치 */
 #player-track.active {
   top: -85px;
+  z-index: 3; /* 올라왔을 때 가장 위로 오도록 설정 */
 }
 
 #album-name {
@@ -138,6 +138,7 @@ body {
   overflow: hidden;
   box-shadow: 0 0 0 10px white;
   transition: .3s ease;
+  z-index: 4;
 }
 
 #album-art.active {
