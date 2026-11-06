@@ -19,9 +19,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  /* 위쪽으로 올라가는 공간을 확실하게 확보하기 위해 패딩 조정 */
-  padding-top: 70px; 
+  /* 상하로 움직이는 트랙 바가 잘리지 않도록 여유 공간 확보 */
+  padding: 60px 0; 
 }
 
 #player-bg-artwork {
@@ -47,7 +46,7 @@ body {
   z-index: 3;
   width: min(430px, calc(100vw - 30px));
   height: 100px;
-  margin: 0 auto;
+  margin: 90px auto 30px auto; /* 위쪽 트랙 바가 올라갈 공간 확보 */
 }
 
 #player {
@@ -58,7 +57,7 @@ body {
 
 #player-track {
   position: absolute;
-  top: 15px; /* 기본 위치를 아래로 살짝 내려서 시작 */
+  top: -85px; /* 기본 상태에서도 트랙 바가 위쪽에 예쁘게 자리 잡도록 수정 */
   left: 15px;
   right: 15px;
   padding: 13px 20px 10px 184px;
@@ -68,8 +67,9 @@ body {
   z-index: 1;
 }
 
+/* 재생 중일 때도 동일한 위치 유지 혹은 자연스러운 연출 */
 #player-track.active {
-  top: -75px; /* 재생될 때 올라가는 높이를 조절하여 위가 잘리지 않게 함 */
+  top: -85px; 
 }
 
 #album-name {
@@ -129,7 +129,7 @@ body {
 
 #album-art {
   position: absolute;
-  top: -25px; /* 기본 위치 조절 */
+  top: -45px;
   width: 115px;
   height: 115px;
   margin-left: 40px;
@@ -140,7 +140,7 @@ body {
 }
 
 #album-art.active {
-  top: -45px; /* 재생될 때 앨범아트 위치 */
+  top: -45px;
   box-shadow: 0 0 0 4px #fffbeb,
               0 30px 50px -15px rgba(217, 119, 6, 0.2);
 }
@@ -211,7 +211,7 @@ body {
 }
 
 #play-pause-button.playing {
-  color: #d97706; /* 재생 버튼 포인트 색상 (진한 주황/노랑) */
+  color: #d97706; /* 재생 버튼 포인트 색상 */
 }
 
 #message {
@@ -224,10 +224,6 @@ body {
 }
 
 @media (max-width: 480px) {
-  body {
-    padding-top: 50px;
-  }
-
   #player-container {
     width: calc(100vw - 24px);
     height: 90px;
@@ -236,13 +232,14 @@ body {
   #player-track {
     padding-left: 125px;
     padding-right: 12px;
+    top: -75px;
   }
 
   #album-art {
     width: 90px;
     height: 90px;
     margin-left: 25px;
-    top: -15px;
+    top: -35px;
   }
 
   #album-art.active {
